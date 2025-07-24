@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema } from "@/lib/authSchemas";
 import type { SignupSchema } from "@/lib/authSchemas";
+import axios from "axios";
 
 export function SignUpForm() {
   const form = useForm<SignupSchema>({
@@ -25,8 +26,22 @@ export function SignUpForm() {
     },
   });
 
-  const onSubmit = (data: SignupSchema) => {
-    console.log("Sign up form submitted:", data);
+  const onSubmit = async (data: SignupSchema) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/api/auth/register",
+        data,
+        { withCredentials: true }
+      );
+
+      console.log("User registered:", response.data);
+      // TODO: כאן אפשר לעדכן את הקונטקסט עם המשתמש או לנווט לדף אחר
+    } catch (error: any) {
+      console.error(
+        "Registration error:",
+        error.response?.data?.message || error.message
+      );
+    }
   };
 
   return (
