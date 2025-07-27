@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { UserForm } from "./components/userform";
 import { NavWrapped } from "./components/navwrapped";
 import { CardWrapped } from "./components/cardwrapped";
 import { SidebarWrapped } from "./components/sidebar.wrapped";
@@ -11,8 +10,8 @@ import { AuthProvider } from "./context/AuthContext";
 import { LoginForm } from "./components/LoginForm";
 import { SignUpForm } from "./components/siginUpForm";
 import { PostsPage } from "./components/PostsPage";
-import { Contact } from "./components/contact";
-
+import Contact from "./components/contact";
+import MyMap from "./components/map";
 function App() {
   return (
     <AuthProvider>
@@ -21,7 +20,7 @@ function App() {
           <div
             className="min-h-[100vh] min-w-[100vw] bg-cover bg-center bg-no-repeat bg-fixed"
             style={{
-              backgroundImage: "url(/images/bg-main-desktop.png)", // Using desktop version for better quality
+              backgroundImage: "url(/images/bg-main-desktop.png)",
             }}
           >
             <NavWrapped />
@@ -45,7 +44,19 @@ function App() {
                   </div>
                 }
               />
-              <Route path="/contact" element={<Contact />} />
+
+              <Route
+                path="/contact"
+                element={
+                  <div className="flex flex-col items-center gap-6 min-h-[calc(100vh-80px)] p-6">
+                    <Contact />
+                    <div className="w-full max-w-4xl">
+                      <MyMap />
+                    </div>
+                  </div>
+                }
+              />
+
               <Route
                 path="/shop"
                 element={
@@ -59,6 +70,7 @@ function App() {
                   </SidebarProvider>
                 }
               />
+
               <Route
                 path="/cart"
                 element={

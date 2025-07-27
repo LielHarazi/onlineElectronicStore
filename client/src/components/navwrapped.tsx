@@ -78,7 +78,7 @@ export function NavWrapped() {
             </NavigationMenuList>
           </NavigationMenu>
 
-          {/* User Authentication  */}
+          {/* User Authentication */}
           <div className="flex items-center gap-4">
             {isAuthenticated ? (
               <>

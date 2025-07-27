@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 
 import authRoutes from "./routes/auth";
 import postRoutes from "./routes/postRouter";
+import contactRoute from "./routes/contactRoute"; // <-- הוסף את זה
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
 
 dotenv.config();
@@ -38,6 +39,7 @@ app.use(morgan("tiny"));
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api/contact", contactRoute); // <-- הוסף את זה
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {
@@ -59,4 +61,5 @@ app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
   console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
   console.log(`🔐 Auth endpoints: http://localhost:${PORT}/api/auth`);
+  console.log(`✉️ Contact endpoint: http://localhost:${PORT}/api/contact`); // אופציונלי
 });

@@ -9,10 +9,13 @@ import {
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useState } from "react";
+import axios from "axios";
 
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<
+    "idle" | "sending" | "success" | "error"
+  >("idle");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -20,10 +23,18 @@ export default function Contact() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(true);
-    // Here you would send the form data to your backend or email service
+    setStatus("sending");
+
+    try {
+      await axios.post("http://localhost:3001/api/contact", form);
+      setStatus("success");
+      setForm({ name: "", email: "", message: "" });
+    } catch (error) {
+      setStatus("error");
+      console.error(error);
+    }
   };
 
   return (
@@ -36,7 +47,7 @@ export default function Contact() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {sent ? (
+          {status === "success" ? (
             <div className="text-green-600 font-medium text-center py-8">
               Thank you for your message! We'll get back to you soon.
             </div>
@@ -92,9 +103,18 @@ export default function Contact() {
                   className="w-full rounded-md border border-gray-300 px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-200"
                 />
               </div>
-              <Button type="submit" className="w-full">
-                Send Message
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={status === "sending"}
+              >
+                {status === "sending" ? "Sending..." : "Send Message"}
               </Button>
+              {status === "error" && (
+                <p className="text-red-600 mt-2 text-center">
+                  Failed to send message. Try again.
+                </p>
+              )}
             </form>
           )}
         </CardContent>
