@@ -24,7 +24,7 @@ export function NavWrapped() {
     <nav className="w-full border-b bg-white shadow-sm sticky top-0 z-50">
       <div className="w-full px-8">
         <div className="flex h-20 items-center justify-between w-full">
-          {/* Navigation Menu - Left side */}
+          {/* Navigation Menu */}
           <NavigationMenu>
             <NavigationMenuList className="flex items-center gap-8">
               <NavigationMenuItem>
@@ -78,7 +78,7 @@ export function NavWrapped() {
             </NavigationMenuList>
           </NavigationMenu>
 
-          {/* User Authentication - Right side */}
+          {/* User Authentication  */}
           <div className="flex items-center gap-4">
             {isAuthenticated ? (
               <>

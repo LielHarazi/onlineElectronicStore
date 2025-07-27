@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import type { PostUser } from "@/types";
 
 interface UserCardProps {
@@ -67,12 +68,12 @@ export function UserCard({ user }: UserCardProps) {
 
       {/* Contact */}
       <div className="pt-4 border-t border-gray-100">
-        <a
-          href={`mailto:${user.email}`}
+        <Link
+          to="/contact"
           className="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors"
         >
           Contact {user.name.split(" ")[0]}
-        </a>
+        </Link>
       </div>
     </div>
   );

@@ -11,6 +11,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { LoginForm } from "./components/LoginForm";
 import { SignUpForm } from "./components/siginUpForm";
 import { PostsPage } from "./components/PostsPage";
+import { Contact } from "./components/contact";
 
 function App() {
   return (
@@ -44,14 +45,7 @@ function App() {
                   </div>
                 }
               />
-              <Route
-                path="/contact"
-                element={
-                  <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
-                    <UserForm />
-                  </div>
-                }
-              />
+              <Route path="/contact" element={<Contact />} />
               <Route
                 path="/shop"
                 element={
