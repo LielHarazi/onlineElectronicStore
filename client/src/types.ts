@@ -1,17 +1,4 @@
-// Authentication Types
-export interface LoginData {
-  name: string;
-  password: string;
-}
-
-export interface SignupData {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  age: string;
-}
-
+// Validation Types
 export interface ValidationErrors {
   [key: string]: string;
 }
@@ -24,15 +11,6 @@ export interface User {
   age: number;
   createdAt: Date;
   updatedAt: Date;
-}
-
-export interface UserSchema {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  age: string;
-  message: string;
 }
 
 // Product Types
@@ -105,36 +83,6 @@ export type TextAreaChangeHandler = (
   event: React.ChangeEvent<HTMLTextAreaElement>
 ) => void;
 
-// Component Props Types
-export interface ButtonProps {
-  children: React.ReactNode;
-  onClick?: () => void;
-  type?: "button" | "submit" | "reset";
-  variant?: "primary" | "secondary" | "outline" | "ghost";
-  size?: "sm" | "md" | "lg";
-  disabled?: boolean;
-  className?: string;
-}
-
-export interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title?: string;
-  children: React.ReactNode;
-  maxWidth?: string;
-}
-
-export interface InputProps {
-  type?: string;
-  value: string;
-  onChange: InputChangeHandler;
-  placeholder?: string;
-  className?: string;
-  error?: string;
-  label?: string;
-  required?: boolean;
-}
-
 // Navigation Types
 export interface NavigationItem {
   label: string;
@@ -150,30 +98,6 @@ export interface ProductFilters {
   inStock?: boolean;
   sortBy?: "name" | "price" | "rating";
   sortOrder?: "asc" | "desc";
-}
-
-// Review Types
-export interface Review {
-  id: ReviewId;
-  productId: ProductId;
-  userId: UserId;
-  userName: string;
-  rating: number;
-  comment: string;
-  createdAt: Date;
-}
-
-// Order Types
-export interface Order {
-  id: OrderId;
-  userId: UserId;
-  items: CartItem[];
-  totalAmount: number;
-  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
-  paymentMethod: string;
-  shippingAddress: string;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 // Utility Types
@@ -244,6 +168,40 @@ export type TimeStamp = number; // Unix timestamp
 // ID Types for better type safety
 export type UserId = string;
 export type ProductId = number;
-export type OrderId = string;
-export type ReviewId = string;
-export type isLoading = string;
+export type PostId = number;
+
+// Post and User Types for Homepage
+export interface Author {
+  name: string;
+  avatar: string;
+  role: string;
+}
+
+export interface Post {
+  id: PostId;
+  userId: UserId;
+  title: string;
+  content: string;
+  author: Author;
+  timestamp: string;
+  likes: number;
+  comments: number;
+  category: "announcement" | "product" | "sale" | "review" | "tips" | "deal";
+  featured: boolean;
+}
+
+export interface PostUser {
+  id: UserId;
+  name: string;
+  email: string;
+  role: string;
+  avatar: string;
+  joinDate: string;
+  postsCount: number;
+  bio: string;
+}
+
+export interface PostsData {
+  posts: Post[];
+  users: PostUser[];
+}

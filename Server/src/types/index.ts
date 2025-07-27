@@ -1,9 +1,19 @@
+import { Request } from "express";
+
 export interface User {
   id: string;
   email: string;
   password: string;
   name: string;
   createdAt: Date;
+}
+
+export interface AuthenticatedRequest extends Request {
+  user?: {
+    id: string;
+    email: string;
+    name: string;
+  };
 }
 
 export interface Book {
@@ -17,6 +27,7 @@ export interface Book {
 }
 
 export interface LoginRequest {
+  name: string;
   email: string;
   password: string;
 }
@@ -30,6 +41,7 @@ export interface RegisterRequest {
 export interface AuthPayload {
   userId: string;
   email: string;
+  name: string;
 }
 
 export interface CreateBookRequest {
@@ -44,4 +56,4 @@ export interface UpdateBookRequest {
   author?: string;
   description?: string;
   publishedYear?: number;
-} 
+}

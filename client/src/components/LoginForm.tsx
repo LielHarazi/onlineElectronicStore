@@ -12,18 +12,38 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/lib/authSchemas";
 import type { LoginSchema } from "@/lib/authSchemas";
+import { useAuth } from "@/context/AuthContext";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function LoginForm() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const [error, setError] = useState<string>("");
+
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       name: "",
+      email: "",
       password: "",
     },
   });
 
-  const onSubmit = (data: LoginSchema) => {
-    console.log("Login form submitted:", data);
+  const onSubmit = async (data: LoginSchema) => {
+    try {
+      setError("");
+      const response = await login(data.name, data.email, data.password);
+
+      if (response.success) {
+        // Redirect to reviews page after successful login
+        navigate("/reviews");
+      } else {
+        setError(response.message || "Login failed");
+      }
+    } catch (err: any) {
+      setError(err.message || "An error occurred during login");
+    }
   };
 
   return (
@@ -34,15 +54,46 @@ export function LoginForm() {
       >
         <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
 
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-md p-3">
+            <p className="text-red-600 text-sm">{error}</p>
+          </div>
+        )}
+
         {/* Name */}
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel htmlFor="login-name">Name</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Enter your name" />
+                <Input
+                  {...field}
+                  id="login-name"
+                  placeholder="Enter your name"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Email */}
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="login-email">Email</FormLabel>
+              <FormControl>
+                <Input
+                  type="email"
+                  {...field}
+                  id="login-email"
+                  placeholder="Enter your email"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -55,11 +106,12 @@ export function LoginForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel htmlFor="login-password">Password</FormLabel>
               <FormControl>
                 <Input
                   type="password"
                   {...field}
+                  id="login-password"
                   placeholder="Enter your password"
                 />
               </FormControl>

@@ -12,9 +12,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema } from "@/lib/authSchemas";
 import type { SignupSchema } from "@/lib/authSchemas";
-import axios from "axios";
+import { useAuth } from "@/context/AuthContext";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function SignUpForm() {
+  const { register } = useAuth();
+  const navigate = useNavigate();
+  const [error, setError] = useState<string>("");
+
   const form = useForm<SignupSchema>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -28,19 +34,22 @@ export function SignUpForm() {
 
   const onSubmit = async (data: SignupSchema) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3001/api/auth/register",
-        data,
-        { withCredentials: true }
+      setError("");
+      const response = await register(
+        data.name,
+        data.email,
+        data.password,
+        parseInt(data.age)
       );
 
-      console.log("User registered:", response.data);
-      // TODO: כאן אפשר לעדכן את הקונטקסט עם המשתמש או לנווט לדף אחר
-    } catch (error: any) {
-      console.error(
-        "Registration error:",
-        error.response?.data?.message || error.message
-      );
+      if (response.success) {
+        // Redirect to reviews page after successful registration
+        navigate("/reviews");
+      } else {
+        setError(response.message || "Registration failed");
+      }
+    } catch (err: any) {
+      setError(err.message || "An error occurred during registration");
     }
   };
 
@@ -51,6 +60,13 @@ export function SignUpForm() {
         className="space-y-6 max-w-md mx-auto p-6 bg-white rounded shadow"
       >
         <h2 className="text-2xl font-bold text-center mb-6">Sign Up</h2>
+
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-md p-3">
+            <p className="text-red-600 text-sm">{error}</p>
+          </div>
+        )}
 
         {/* Name */}
         <FormField
